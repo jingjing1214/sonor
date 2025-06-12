@@ -4,7 +4,7 @@ def ask_perplexity(api_key, user_input):
     url = "https://api.perplexity.ai/chat/completions"
     headers = {"Authorization": f"Bearer {api_key}"}
     payload = {
-        "model": "sonar-small-chat",  # ✅ 使用 sonar 模型，符合 Perplexity Pro 權限
+        "model": "sonar",
         "messages": [
             {"role": "user", "content": user_input}
         ]
