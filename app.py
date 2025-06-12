@@ -1,5 +1,4 @@
 import streamlit as st
-from recipe_scraper import search_recipes
 from chatbot import ask_perplexity
 
 st.set_page_config(page_title="冰箱食材推薦系統", layout="wide")
@@ -11,19 +10,16 @@ with st.sidebar:
     default_ingredients = st.text_input("請輸入冰箱食材（用逗號分隔）", "雞肉, 馬鈴薯")
 
 if api_key:
-    st.subheader("🔍 推薦食譜")
+    st.subheader("🍽️ Perplexity 食譜推薦")
     if st.button("推薦食譜"):
-        with st.spinner("搜尋中..."):
-            try:
-                results = search_recipes(default_ingredients)
-                if results:
-                    for title, url, snippet in results:
-                        st.markdown(f"### [{title}]({url})")
-                        st.markdown(f"> {snippet}")
-                else:
-                    st.warning("❌ 找不到食譜，請確認關鍵字或稍後再試。")
-            except Exception as e:
-                st.error(f"⚠️ 食譜搜尋失敗：{e}")
+        with st.spinner("AI 正在為你設計料理..."):
+            prompt = f"""我冰箱裡有：{default_ingredients}。
+請推薦一個可以做的料理，請以以下格式回覆：
+🍽️ 料理名稱：
+🧂 所需食材：
+🧑‍🍳 烹調流程：（請用 3~5 步驟分段說明）"""
+            recipe = ask_perplexity(api_key, prompt)
+            st.markdown(recipe)
 
     st.subheader("🧠 與料理助理聊聊")
     user_input = st.text_input("輸入你的問題")
